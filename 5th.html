@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mini E-Commerce & Portfolio</title>
+  <style>
+    * {box-sizing: border-box;}
+   body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: url('https://img.freepik.com/free-photo/paper-bags-different-colors-blue-background-top-view_169016-43755.jpg') 
+              no-repeat center center fixed;
+  background-size: cover;
+  color: #333;
+}
+
+    header {
+      background: linear-gradient(135deg,#6a11cb,#2575fc);
+      color: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top:0; z-index:1000;
+    }
+    header h1 {margin:0; font-size:1.5rem;}
+    nav a {
+      color: #fff; margin: 0 1rem; text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover {text-decoration: underline;}
+    section {padding: 3rem 2rem;}
+    h2 {text-align:center; margin-bottom:2rem; color:#0b0b0a;font-size:2.5rem; }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+      gap: 1.5rem;
+      max-width:1100px; margin:auto;
+    }
+    .product {
+      background:#fff; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.1);
+      padding:1rem; text-align:center; transition:transform .2s;
+    }
+    .product:hover {transform: translateY(-5px);}
+    .product img {width:100%; border-radius:10px;}
+    .product h3 {margin:.5rem 0;}
+    .product button {
+      background:#2575fc; color:#fff; border:none;
+      padding:.5rem 1rem; border-radius:5px; cursor:pointer;
+    }
+    .cart {
+      max-width:800px; margin:2rem auto; background:#fff; padding:1rem; border-radius:10px;
+      box-shadow:0 2px 6px rgba(0,0,0,.1);
+    }
+    .cart-item {display:flex; justify-content:space-between; margin:.5rem 0;}
+    
+    form {
+      max-width:600px; margin:auto; background:#fff;
+      padding:2rem; border-radius:10px; box-shadow:0 4px 8px rgba(0,0,0,0.1);
+    }
+    label {display:block; margin:.5rem 0 .2rem;}
+    input, textarea {
+      width:100%; padding:.7rem; margin-bottom:1rem;
+      border:1px solid #ccc; border-radius:5px;
+    }
+    button[type="submit"] {
+      background:#6a11cb; color:#fff; border:none;
+      padding:.7rem 1.5rem; border-radius:5px; cursor:pointer;
+    }
+    footer {background:#2575fc; color:#fff; text-align:center; padding:1rem; margin-top:3rem;}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Super Merket</h1>
+    <nav>
+      <a href="#shop">Shop</a>
+       <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- E-Commerce Section -->
+  <section id="shop">
+    <h2>Our Products</h2>
+    <div class="products" id="products"></div>
+    <div class="cart" id="cart">
+      <h3>Shopping Cart</h3>
+      <div id="cart-items"></div>
+    </div>
+  </section>
+
+ 
+    
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <h2>Contact Us</h2>
+    <form onsubmit="sendMessage(event)">
+      <label for="name">Name</label>
+      <input id="name" required>
+      <label for="email">Email</label>
+      <input id="email" type="email" required>
+      <label for="message">Message</label>
+      <textarea id="message" rows="5" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+  </section>
+
+  <footer>&copy; 2025 Mini E-Commerce & Portfolio</footer>
+
+  <script>
+    // Updated Product Data with Realistic Images and Categories
+    const productsData = [
+      {id:1, name:'Classic T-Shirt', price:20, img:'https://veirdo.in/cdn/shop/files/vb200.jpg?v=1754543673&width=533', category:'Clothing'},
+      {id:2, name:'Running Shoes', price:50, img:'https://www.skechers.in/on/demandware.static/-/Sites-skechers_india/default/dw178b0ae2/images/large/198376633790-1.jpg', category:'Footwear'},
+      {id:3, name:'Smart Watch', price:80, img:'https://www.gonoise.com/cdn/shop/files/1_c95e5561-4f66-413d-b143-42d31821e554.webp?v=1721392308', category:'Accessories'},
+      {id:4, name:'Leather Backpack', price:65, img:'https://rukminim2.flixcart.com/image/704/844/xif0q/backpack/c/i/e/genuine-leather-laptop-backpack-for-men-travel-bags-fit-17-inch-original-imagug4aqzfysfmu.jpeg?q=90&crop=false', category:'Bags'},
+      {id:5, name:'Wireless Headphones', price:120, img:'https://www.leafstudios.in/cdn/shop/files/1_a43c5e0b-3a47-497d-acec-b4764259b10e_1024x1024.png?v=1750486829', category:'Electronics'},
+      {id:6, name:'Sunglasses', price:25, img:'https://eyejack.in/cdn/shop/files/17001pcl745-1.jpg?v=1745665949', category:'Accessories'},
+      {id:7, name:'Sports Jacket', price:70, img:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQc9dlutjq7R-Lj9Om-a2NX4i1zUkNpZcwYLA&s', category:'Clothing'},
+      {id:8, name:'Casual Sneakers', price:55, img:'https://assets.myntassets.com/w_412,q_30,dpr_3,fl_progressive,f_webp/assets/images/30990218/2024/9/18/a56e79a9-1cbf-4257-8ed7-9feb35750c791726651658007-The-Roadster-Lifestyle-Co-Men--Lace-Ups-Casual-Sneakers-7861-1.jpg', category:'Footwear'},
+      {id:9, name:'Saree', price:45, img:'https://cdn.sareeka.com/image/cache/data2024/meenakari-and-woven-work-silk-traditional-saree-in-beige-296685-1000x1375.jpg', category:'Clothing'},
+      {id:10, name:'Ladies shoes', price:90, img:'https://fausto.in/cdn/shop/files/FST_FJDWC-7008_SKY_0_400x.jpg?v=1694239131', category:'Footwear'},
+        {id:11, name:'Handbag', price:60, img:'https://images-static.nykaa.com/media/catalog/product/0/9/0931c3eSS23_HSHB1671_1.jpg?tr=w-500', category:'Bags'},
+        {id:12, name:'Jwellery', price:110, img:'https://assets0.mirraw.com/images/11544496/image_zoom.jpeg?1685183472', category:'jwellery'},
+        {id:13, name:'Grocery', price:15, img:'https://m.media-amazon.com/images/I/71wVU7pgwAL.jpg', category:'grocery'},
+        {id:14, name:'Washing Machine', price:200, img:'https://sharptronics.in/cdn/shop/products/FHP1208Z9B-Washing-Machines-Front-View-D-01.jpg?v=1664954527', category:'Machine'},
+        {id:15, name:'Refrigerator', price:300, img:'https://www.lg.com/content/dam/channel/wcms/in/images/refrigerators/gl-i292rpzx_bpzzebn_eail_in_c/GL-I292RPZX-Refrigerators-Front-View-450.jpg', category:'Machine'},
+        {id:16, name:'Gift', price:5, img:'https://madrasbommaikadai.in/cdn/shop/files/Screenshot-20240508_162437_VidMate.jpg?v=1725127796', category:'Gift'}
+    ];
+
+    const productsContainer = document.getElementById('products');
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cart = [];
+
+    // Display Products
+    productsData.forEach(p=>{
+      const div=document.createElement('div');
+      div.className='product';
+      div.innerHTML=`
+        <img src="${p.img}?w=500&auto=format" alt="${p.name}">
+        <h3>${p.name}</h3>
+        <p>Category: ${p.category}</p>
+        <p>$${p.price}</p>
+        <button onclick="addToCart(${p.id})">Add to Cart</button>
+      `;
+      productsContainer.appendChild(div);
+    });
+
+    function addToCart(id){
+      const product = productsData.find(p=>p.id===id);
+      cart.push(product);
+      renderCart();
+    }
+
+    function renderCart(){
+      cartItemsContainer.innerHTML='';
+      cart.forEach((item,index)=>{
+        const div=document.createElement('div');
+        div.className='cart-item';
+        div.innerHTML=`${item.name} - $${item.price} 
+          <button onclick="removeItem(${index})">x</button>`;
+        cartItemsContainer.appendChild(div);
+      });
+    }
+
+    function removeItem(index){
+      cart.splice(index,1);
+      renderCart();
+    }
+
+    
+
+    function sendMessage(e){
+      e.preventDefault();
+      const name=document.getElementById('name').value.trim();
+      const email=document.getElementById('email').value.trim();
+      const message=document.getElementById('message').value.trim();
+      if(name && email && message){
+        alert(`Thanks, ${name}! Your message has been sent.`);
+        e.target.reset();
+      }
+    }
+  </script>
+</body>
+</html>
